@@ -217,13 +217,14 @@ namespace ConsoleApplication1
                     for (int col = 0; col < curBitmap.Width - 4; col++)
                     {
                         double[] select = new double[5];
+                        double[] secletsort=new double[5];
                         for (int i = 0; i < 5; i++)
                         {
                             select[i] = process[row, col + i];
+                            selectsort[i]=process[row,col+i]
                         }
-                        double max = select.Max();
-                        double selectsum = select.Sum();
-                        double baselen = (selectsum - max) / 4;
+                        Array.Sort(selectsort);
+                        double baselen = (selectsort[1] + selectsort[2] ) / 2;
                         if (baselen != 0)
                         {
                             if (select[0] >= baselen * 0.5 && select[0] <= baselen * 1.5 && select[1] >= baselen * 0.5 && select[1] <= baselen * 1.5 && select[2] >= baselen * 2.1 && select[2] <= baselen * 3.9 && select[3] >= baselen * 0.5 && select[3] <= baselen * 1.5 && select[4] >= baselen * 0.5 && select[4] <= baselen * 1.5)
@@ -235,7 +236,7 @@ namespace ConsoleApplication1
                                     sum1 = sum1 + (int)(select[2] / 2) + 1;
                                     if (curBitmap.GetPixel(sum1, row).R == 0)
                                     {
-                                        suitratio[row, sum1] = 1;
+                                        suitratio[row, sum1-1] = 1;
                                     }
                                 }
                                 else
@@ -243,12 +244,12 @@ namespace ConsoleApplication1
                                     sum1 = sum1 + (int)(select[2] / 2);
                                     if (curBitmap.GetPixel(sum1, row).R == 0)
                                     {
-                                        suitratio[row, sum1] = 1;
+                                        suitratio[row, sum1-1] = 1;
                                     }
                                     sum1 = sum1 + 1;
                                     if (curBitmap.GetPixel(sum1, row).R == 0)
                                     {
-                                        suitratio[row, sum1] = 1;
+                                        suitratio[row, sum1-1] = 1;
                                     }
                                 }
                             }
@@ -285,13 +286,17 @@ namespace ConsoleApplication1
                     for (int row = 0; row < curBitmap.Height - 4; row++)
                     {
                         double[] select = new double[5];
+                        double[] selectsort= new double[5];
                         for (int i = 0; i < 5; i++)
                         {
+                            selectsort[i]=porcess1[row+i,col];
                             select[i] = process1[row + i, col];
                         }
-                        double max = select.Max();
-                        double selectsum = select.Sum();
-                        double baselen = (selectsum - max) / 4;
+                        Array.Sort(selectsort);
+                        double baselen = (selectsort[1] + selectsort[2] ) / 2;
+                        //double max = select.Max();
+                        //double selectsum = select.Sum();
+                        //double baselen = (selectsum - max) / 4;
                         if (baselen != 0)
                         {
                             if (select[0] >= baselen * 0.5 && select[0] <= baselen * 1.5 && select[1] >= baselen * 0.5 && select[1] <= baselen * 1.5 && select[2] >= baselen * 2.1 && select[2] <= baselen * 3.9 && select[3] >= baselen * 0.5 && select[3] <= baselen * 1.5 && select[4] >= baselen * 0.5 && select[4] <= baselen * 1.5)
@@ -303,7 +308,7 @@ namespace ConsoleApplication1
                                     sum1 = sum1 + (int)(select[2] / 2) + 1;
                                     if (curBitmap.GetPixel(col, sum1).R == 0)
                                     {
-                                        suitratio[sum1, col] = suitratio[sum1, col] + 1;
+                                        suitratio[sum1-1, col] = suitratio[sum1-1, col] + 1;
                                     }
                                 }
                                 else
@@ -311,12 +316,12 @@ namespace ConsoleApplication1
                                     sum1 = sum1 + (int)(select[2] / 2);
                                     if (curBitmap.GetPixel(col, sum1).R == 0)
                                     {
-                                        suitratio[sum1, col] = suitratio[sum1, col] + 1;
+                                        suitratio[sum1-1, col] = suitratio[sum1-1, col] + 1;
                                     }
                                     sum1 = sum1 + 1;
                                     if (curBitmap.GetPixel(col, sum1).R == 0)
                                     {
-                                        suitratio[sum1, col] = suitratio[sum1, col] + 1;
+                                        suitratio[sum1-1, col] = suitratio[sum1-1, col] + 1;
                                     }
                                 }
                             }
@@ -340,6 +345,19 @@ namespace ConsoleApplication1
                                 suitratio[row, col + 1] = 0;
                                 suitratio[row + 1, col + 1] = 0;
                                 co_x = col + 0.5;
+                                co_y = row + 0.5;
+                            }
+                             else if (suitratio[row + 1, col] == 2 && suitratio[row + 1, col - 1] == 2)
+                            {
+                                suitratio[row + 1, col] = 0;
+                                suitratio[row + 1, col - 1] = 0;
+                                co_x = col - 0.5;
+                                co_y = row + 0.5;
+                            }
+                             else if (suitratio[row + 1, col - 1] == 2)
+                            {
+                                suitratio[row + 1, col - 1] = 0;
+                                co_x = col - 0.5;
                                 co_y = row + 0.5;
                             }
                             else if (suitratio[row + 1, col] == 2)
